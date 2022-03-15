@@ -4,7 +4,7 @@
 # Once this is deployed you should be able to access it at http://IP:8084/ where IP is your lab VM.
 
 services:
-	wordle:
+  wordle:
     image: modem7/wordle
     ports:
       - 8084:80
