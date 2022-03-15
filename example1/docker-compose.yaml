@@ -1,46 +1,31 @@
-# Example 1 - Azure Voting App
-# Microsoft provides a voting app to demo the capabilities of containerization on Azure
-# Here we see lots of cool things happening including deploying a database and running a web app.
-# Detailed comments are provided below.
-
-# We define the Compose version
-version: '3'
 services:
-  azure-vote-back:
-    # We build/compile the Docker image at run time rather than pulling it from a registry
-    build: ./azure-vote-mysql
-    image: azure-vote-back
-    container_name: azure-vote-back
-    # We set environment variables within the container that it can read. This is one
-    # way to pass data into a container. As you can see, it's not secure though!
+  gitea:
+    image: gitea/gitea:latest
     environment:
-      MYSQL_USER: dbuser
-      # It's a bad practice to hardcode passwords. It's an even worse practice to put them
-      # in a file that's uploaded to a repository. In the real world, we must use secret
-      # management to ensure sensitive data is securely passed to the container.
-      MYSQL_PASSWORD: Password12
-      MYSQL_DATABASE: azurevote
-      # Demoing a more complex password... still insecure if it's shared in the repository.
-      MYSQL_ROOT_PASSWORD: 4ab18d0e-529d-4ae0-9584-6195FD31AeD9
-    # Note the use of EXPOSE instead of PORTS. This means other containers can access the service
-    # on the defined port but it not mapped to the host system.
-    expose:
-        - 3306
-  azure-vote-front:
-    # We build again instead of pulling from a registry
-    build: ./azure-vote
-    # Setting this dependency ensures an order of operations to container starts. In this case,
-    # it ensures the database is up before we start the web app
-    depends_on:
-        - azure-vote-back
-    image: azure-vote-front
-    container_name: azure-vote-front
-    environment:
-      MYSQL_USER: dbuser
-      MYSQL_PASSWORD: Password12
-      MYSQL_DATABASE: azurevote
-      MYSQL_HOST: azure-vote-back
-    # Here we map the ports being used from the HOST to the CONTAINER. The host uses port tcp/8081
-    # and it goes to the container on port tcp/80.
+      - DB_TYPE=postgres
+      - DB_HOST=db:5432
+      - DB_NAME=gitea
+      - DB_USER=gitea
+      - DB_PASSWD=gitea
+    restart: always
+    volumes:
+      - git_data:/data
     ports:
-        - "8081:80"
+      - 3000:3000
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=gitea
+      - POSTGRES_PASSWORD=gitea
+      - POSTGRES_DB=gitea
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    expose:
+      - 5432
+volumes:
+  db_data:
+  git_data:
+  
+  
+    
