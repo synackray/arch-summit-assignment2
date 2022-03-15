@@ -1,6 +1,6 @@
 # EXAMPLE 2 - Wordpress Website
 # Here we see two different containers being defined, a database and wordpress.
-# Once this is deployed you should be able to access the Wordpress site at http://IP:8090/ where IP is your lab VM.
+# Once this is deployed you should be able to access the Wordpress site at http://IP:8082/ where IP is your lab VM.
 
 services:
   db:
@@ -27,10 +27,10 @@ services:
       - 33060
   wordpress:
     image: wordpress:latest
-    # Often times you might find containers use the same ports. Here we set the HOST port tcp/8090 mapped to the container
+    # Often times you might find containers use the same ports. Here we set the HOST port tcp/8082 mapped to the container
     # port tcp/80. This lets us avoid conflicts (and poorly hide our new Wordpress install from the Internet.)
     ports:
-      - 8090:80
+      - 8082:80
     restart: always
     environment:
       - WORDPRESS_DB_HOST=db
