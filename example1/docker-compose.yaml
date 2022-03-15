@@ -1,17 +1,34 @@
+# EXAMPLE 1 - Install Gitea
+# Here we see lots of cool things happening including deploying a database and running a web app, Gitea.
+# Not familiar with Gitea? It's a source code management platform like GitHub that hosts repositories.
+# Inception much?
+# See the in-line comments for explanations on the config.
+
 services:
   gitea:
+    # We're pulling the image from a central repository, in this case Docker Hub.
     image: gitea/gitea:latest
+    # We set environment variables within the container that it can read. This is one
+    # way to pass data into a container. As you can see, it's not secure though!
     environment:
       - DB_TYPE=postgres
       - DB_HOST=db:5432
       - DB_NAME=gitea
       - DB_USER=gitea
+      # It's a bad practice to hardcode passwords. It's an even worse practice to put them
+      # in a file that's uploaded to a repository. In the real world, we must use secret
+      # management to ensure sensitive data is securely passed to the container.
       - DB_PASSWD=gitea
+    # Did you know you can define the restart behavior of your containers?
     restart: always
+    # Notice how we map a storage volume to a path inside the container. To do this we
+    # must define the volume as well. This is shown at the bottom.
     volumes:
       - git_data:/data
+    # Here we map the ports being used from the HOST to the CONTAINER. The host uses port tcp/8081
+    # and it goes to the container on port tcp/3000.
     ports:
-      - 3000:3000
+      - 8081:3000
   db:
     image: postgres:alpine
     environment:
@@ -21,11 +38,14 @@ services:
     restart: always
     volumes:
       - db_data:/var/lib/postgresql/data
+    # Note the use of EXPOSE instead of PORTS. This means other containers can access the service
+    # on the defined port but it not mapped to the host system.
     expose:
       - 5432
+# We're creating persistent volumes that will survive container restarts
 volumes:
   db_data:
   git_data:
-  
-  
-    
+
+
+
