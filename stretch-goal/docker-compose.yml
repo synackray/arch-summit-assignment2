@@ -1,14 +1,13 @@
-# Example 3 - Tetris!
-# Everyone loves Tetris right? Well here's your very own instance of it.
-# But wait... something's not quite right. Can you figure out how to fix
-# this Compose file and get it deployed?
-# Once this is deployed you should be able to access it at http://IP:8083/ where IP is your lab VM.
+# Stretch Goal - Wordle!
+# This looks really similar to example 3 doesn't it?
+# Well maybe it is, maybe it isn't... Good luck.
+# Once this is deployed you should be able to access it at http://IP:8084/ where IP is your lab VM.
 
 services:
-	tetris:
-    image: bsord/tetris
-    port:
-      - 8083:80
+	wordle:
+    image: modem7/wordle
+    ports:
+      - 8084:80
     restart: always
 
 # Really? There's nothing else here? Nope.. You can run single containers with Docker Compose too.
