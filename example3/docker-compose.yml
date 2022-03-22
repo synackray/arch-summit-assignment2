@@ -6,7 +6,7 @@
 
 services:
   tetris:
-    image: bsord/tetris
+    image: uzyexe/tetris
     port:
       - 8083:80
     restart: always
